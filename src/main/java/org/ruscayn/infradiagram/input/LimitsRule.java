@@ -45,6 +45,15 @@ final class LimitsRule implements InputRule {
             int maximum = limits.maxElementsPerCluster();
             throw new InvalidInputException(message.formatted(clusterNumber, cluster.size(), maximum));
         }
+        checkLabelCount(cluster, clusterNumber);
+    }
+
+    private void checkLabelCount(Cluster cluster, int clusterNumber) {
+        long labeled = cluster.elements().stream().filter(Element::hasLabel).count();
+        if (labeled > limits.maxLabelsPerCluster()) {
+            String message = "Cluster #%d has too many labeled elements: %d. The maximum is %d.";
+            throw new InvalidInputException(message.formatted(clusterNumber, labeled, limits.maxLabelsPerCluster()));
+        }
     }
 
     private void checkLabelLength(Element element) {

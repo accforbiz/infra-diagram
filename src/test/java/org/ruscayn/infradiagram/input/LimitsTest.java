@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 class LimitsTest {
 
-    private static final InputLimits LIMITS = new InputLimits(3, 2, 4, 5);
+    private static final InputLimits LIMITS = new InputLimits(3, 2, 4, 2, 5);
 
     @Test
     @DisplayName("무리의 수가 최솟값인 1개와 상한인 3개이면 받는다")
@@ -54,6 +54,24 @@ class LimitsTest {
         String message = InputTesting.rejectionOf(InputTesting.oneCluster(InputTesting.elements(5)), LIMITS);
 
         assertEquals("Cluster #1 has too many elements: 5. The maximum is 4.", message);
+    }
+
+    @Test
+    @DisplayName("한 무리에서 글자가 붙은 요소가 상한인 2개이면 받고, 글자가 없는 요소는 세지 않는다")
+    void acceptsLabelCountAtLimit() {
+        String elements = "{\"id\":\"a\",\"label\":\"A\"},{\"id\":\"b\"},{\"id\":\"c\",\"label\":\"C\"}";
+
+        assertEquals(3, InputTesting.read(InputTesting.oneCluster(elements), LIMITS).elements().size());
+    }
+
+    @Test
+    @DisplayName("한 무리에서 글자가 붙은 요소가 상한보다 하나 많으면 몇 번째 무리인지와 함께 거부한다")
+    void rejectsOneLabelOverLimit() {
+        String elements = "{\"id\":\"a\",\"label\":\"A\"},{\"id\":\"b\",\"label\":\"B\"},{\"id\":\"c\",\"label\":\"C\"}";
+
+        String message = InputTesting.rejectionOf(InputTesting.oneCluster(elements), LIMITS);
+
+        assertEquals("Cluster #1 has too many labeled elements: 3. The maximum is 2.", message);
     }
 
     @Test

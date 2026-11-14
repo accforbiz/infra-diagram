@@ -7,7 +7,7 @@ import org.ruscayn.infradiagram.model.Infrastructure;
 
 public final class TestInputs {
 
-    private static final InputLimits ROOMY = new InputLimits(100, 100, 100, 100);
+    private static final InputLimits ROOMY = new InputLimits(100, 100, 100, 100, 100);
 
     private TestInputs() {
     }

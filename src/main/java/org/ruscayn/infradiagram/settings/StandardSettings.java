@@ -39,10 +39,10 @@ final class StandardSettings {
     private static final LineSettings LINES = new LineSettings(2.5, 2.0, 9, 2.0);
 
     /** 기둥 반지름과 글자 크기의 최솟값(픽셀). 이보다 작게 그려야 하면 그리지 않는다. */
-    private static final QualityThresholds QUALITY = new QualityThresholds(12, 16);
+    private static final QualityThresholds QUALITY = new QualityThresholds(12, 18);
 
-    /** 무리의 수, 요소가 둘 이상인 무리의 수(색의 수와 같다), 한 무리의 요소 수, 글자 길이의 상한. */
-    private static final InputLimits LIMITS = new InputLimits(12, 6, 19, 30);
+    /** 무리의 수, 요소가 둘 이상인 무리의 수(색의 수와 같다), 한 무리의 요소 수, 한 무리의 글자 수, 글자 길이의 상한. */
+    private static final InputLimits LIMITS = new InputLimits(12, 6, 19, 3, 20);
 
     private StandardSettings() {
     }

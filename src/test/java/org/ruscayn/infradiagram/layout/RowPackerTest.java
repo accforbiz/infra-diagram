@@ -2,6 +2,7 @@ package org.ruscayn.infradiagram.layout;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -21,6 +22,23 @@ class RowPackerTest {
 
         assertEquals(List.of(0.0, 10.0, 20.0, 0.0, 10.0, 20.0), placed.stream().map(Box::left).toList());
         assertEquals(List.of(0.0, 0.0, 0.0, 10.0, 10.0, 10.0), placed.stream().map(Box::top).toList());
+    }
+
+    /**
+     * 틀렸던 곳을 재현한다. 첫 줄에 큰 것 셋(너비 30), 둘째 줄에 큰 것 셋과 작은 것 셋(너비 39)을 놓으면
+     * 39 × 20이 되어 배율이 1600 / 39 = 41.0이다. 전체 너비 69를 2나 3으로 나눈 한도로는 이 배치가
+     * 나오지 않아 세 줄(배율 37.5)을 고르던 결함이 있었다. 첫 줄은 (39 - 30) / 2 = 4.5만큼 가운데로 옮겨진다.
+     */
+    @Test
+    @DisplayName("큰 덩어리 여섯 개 뒤에 작은 덩어리 세 개가 오면, 작은 것들을 둘째 줄 끝에 붙인 두 줄 배치를 찾아낸다")
+    void findsRowBreakThatEvenSplitsMiss() {
+        List<Box> blocks = new ArrayList<>(Collections.nCopies(6, new Box(0, 0, 10, 10)));
+        blocks.addAll(Collections.nCopies(3, new Box(0, 0, 3, 4)));
+
+        List<Box> placed = new RowPacker(0, 0, 0, SIXTEEN_BY_NINE).pack(blocks);
+
+        assertEquals(List.of(4.5, 14.5, 24.5, 0.0, 10.0, 20.0, 30.0, 33.0, 36.0), placed.stream().map(Box::left).toList());
+        assertEquals(List.of(0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 13.0, 13.0, 13.0), placed.stream().map(Box::top).toList());
     }
 
     @Test

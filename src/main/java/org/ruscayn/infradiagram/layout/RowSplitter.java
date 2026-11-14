@@ -13,6 +13,9 @@ import org.ruscayn.infradiagram.scene.Box;
  */
 final class RowSplitter {
 
+    /** 한도와 너비가 같을 때, 소수 계산의 아주 작은 오차 때문에 줄이 넘어가지 않게 하는 여유다. */
+    private static final double ROUNDING = 1e-9;
+
     private final double gap;
 
     RowSplitter(double gap) {
@@ -22,7 +25,7 @@ final class RowSplitter {
     List<List<Box>> split(List<Box> blocks, double widthLimit) {
         List<List<Box>> rows = new ArrayList<>();
         for (Box block : blocks) {
-            if (rows.isEmpty() || rowWidth(rows.getLast()) + gap + block.width() > widthLimit) {
+            if (rows.isEmpty() || rowWidth(rows.getLast()) + gap + block.width() > widthLimit + ROUNDING) {
                 rows.add(new ArrayList<>());
             }
             rows.getLast().add(block);
