@@ -1,0 +1,10 @@
+{
+  "clusters": [
+    { "elements": [
+        { "id": "order-db", "scale": "large", "core": true, "label": "주문 DB" },
+        { "id": "customer-db", "label": "고객 DB" },
+        { "id": "log-store", "scale": "small", "label": "로그 저장소" }
+    ] }
+  ],
+  "links": [ { "between": ["order-db", "customer-db"] } ]
+}

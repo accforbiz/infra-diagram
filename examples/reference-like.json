@@ -1,0 +1,30 @@
+{
+  "clusters": [
+    { "elements": [
+        { "id": "sales-lake", "scale": "large", "core": true, "label": "DATA LAKE" },
+        { "id": "crm" }, { "id": "billing" }, { "id": "quote-tool", "scale": "small" },
+        { "id": "partner-portal" }, { "id": "sales-report", "scale": "small" }, { "id": "forecast" }
+    ] },
+    { "elements": [
+        { "id": "ops-lake", "scale": "large", "core": true, "label": "DATA LAKE" },
+        { "id": "erp" }, { "id": "inventory" }, { "id": "mes", "scale": "small" },
+        { "id": "scheduler" }, { "id": "quality-check" }, { "id": "maintenance", "scale": "small" },
+        { "id": "logistics" }
+    ] },
+    { "elements": [
+        { "id": "risk-lake", "scale": "large", "core": true, "label": "DATA LAKE" },
+        { "id": "fraud-monitor" }, { "id": "audit", "scale": "small" }, { "id": "compliance" },
+        { "id": "ledger" }, { "id": "treasury", "scale": "small" }
+    ] },
+    { "elements": [ { "id": "survey-tool", "label": "POINT SOLUTION" } ] },
+    { "elements": [ { "id": "chatbot", "scale": "small", "label": "CUSTOM APPLICATION" } ] },
+    { "elements": [ { "id": "wiki", "label": "POINT SOLUTION" } ] }
+  ],
+  "links": [
+    { "between": ["survey-tool", "crm"] },
+    { "between": ["chatbot", "erp"] },
+    { "between": ["wiki", "audit"] },
+    { "between": ["forecast", "inventory"] },
+    { "between": ["logistics", "ledger"] }
+  ]
+}

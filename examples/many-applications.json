@@ -1,0 +1,34 @@
+{
+  "clusters": [
+    { "elements": [
+        { "id": "commerce-db", "scale": "large", "core": true, "label": "커머스 DB" },
+        { "id": "storefront-web", "label": "스토어 웹" },
+        { "id": "storefront-app" },
+        { "id": "cart-api", "scale": "small" },
+        { "id": "payment-api", "label": "결제 API" },
+        { "id": "coupon-api", "scale": "small" },
+        { "id": "search-api" },
+        { "id": "review-api", "scale": "small" },
+        { "id": "seller-center" }
+    ] },
+    { "elements": [
+        { "id": "analytics-warehouse", "scale": "large", "core": true, "label": "분석 웨어하우스" },
+        { "id": "dashboard" },
+        { "id": "recommendation", "label": "추천 엔진" },
+        { "id": "etl-batch", "scale": "small" },
+        { "id": "ab-test", "scale": "small" }
+    ] },
+    { "elements": [
+        { "id": "delivery-tracker", "label": "배송 조회" },
+        { "id": "warehouse-app" },
+        { "id": "driver-app", "scale": "small" }
+    ] },
+    { "elements": [ { "id": "cs-chatbot", "scale": "small", "label": "상담 챗봇" } ] }
+  ],
+  "links": [
+    { "between": ["commerce-db", "analytics-warehouse"] },
+    { "between": ["payment-api", "delivery-tracker"] },
+    { "between": ["cs-chatbot", "storefront-web"] },
+    { "between": ["recommendation", "search-api"] }
+  ]
+}
