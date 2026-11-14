@@ -65,13 +65,22 @@ class QualityRulesTest {
     }
 
     @Test
-    @DisplayName("조건 6과 7: 최소 크기와 같으면 받아들이고, 그보다 작은 기둥과 글자만 찾아낸다")
-    void findsOnlyMarksBelowMinimumSize() {
-        Scene scene = Scenes.of(List.of(pillar("a", 0, 500, 500, 50)), List.of(label("b", 900, 100, 15.9)));
+    @DisplayName("조건 6: 기둥이 최소 크기와 같으면 받아들이고, 그보다 작으면 가장 작은 기둥의 크기를 알린다")
+    void findsPillarBelowMinimumSize() {
+        Scene scene = Scenes.of(List.of(pillar("a", 0, 500, 500, 50)), List.of());
 
         assertEquals(List.of(), new PillarMinimumSize(Scenes.RADIUS).violations(scene));
-        assertEquals(1, new PillarMinimumSize(Scenes.RADIUS + 0.1).violations(scene).size());
-        assertEquals(List.of("Label of 'b' is too small: 15.9 px, minimum 16.0 px."),
+        assertEquals(List.of("The smallest pillar would be drawn with a radius of 20.0 px. The minimum is 20.1 px."),
+                new PillarMinimumSize(Scenes.RADIUS + 0.1).violations(scene));
+    }
+
+    @Test
+    @DisplayName("조건 7: 글자가 최소 크기와 같으면 받아들이고, 그보다 작으면 글자가 여럿이어도 한 줄로 알린다")
+    void findsTextBelowMinimumSize() {
+        Scene scene = Scenes.of(List.of(), List.of(label("b", 900, 100, 15.9), label("c", 900, 300, 15.9)));
+
+        assertEquals(List.of(), new TextMinimumSize(15.9).violations(scene));
+        assertEquals(List.of("Labels would be drawn 15.9 px high. The minimum is 16.0 px."),
                 new TextMinimumSize(16).violations(scene));
     }
 }
