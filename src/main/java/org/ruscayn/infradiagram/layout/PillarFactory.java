@@ -23,6 +23,6 @@ final class PillarFactory {
     Pillar create(Element element, Standing standing, int clusterIndex, ClusterStyle style) {
         double radius = standing.radius();
         return new Pillar(element.id(), clusterIndex, style, projection.onGround(standing.spot()),
-                radius, projection.depthRadius(radius), standing.height(), element.hasLabel());
+                radius, projection.depthRadius(radius), standing.height());
     }
 }

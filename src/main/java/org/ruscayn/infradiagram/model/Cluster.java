@@ -13,6 +13,10 @@ public record Cluster(List<Element> elements) {
         return elements.size();
     }
 
+    public boolean hasSingleElement() {
+        return elements.size() == 1;
+    }
+
     public List<Element> coreElements() {
         return elements.stream().filter(Element::core).toList();
     }

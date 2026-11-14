@@ -7,7 +7,7 @@ import org.ruscayn.infradiagram.model.Infrastructure;
 
 final class InputTesting {
 
-    private static final InputLimits ROOMY = new InputLimits(100, 100, 100);
+    private static final InputLimits ROOMY = new InputLimits(100, 100, 100, 100);
 
     private InputTesting() {
     }
@@ -26,6 +26,10 @@ final class InputTesting {
 
     static String rejectionOf(String json, InputLimits limits) {
         return assertThrows(InvalidInputException.class, () -> read(json, limits)).getMessage();
+    }
+
+    static String clusters(String... clusters) {
+        return "{\"clusters\":[" + String.join(",", clusters) + "]}";
     }
 
     static String oneCluster(String elements) {

@@ -14,8 +14,7 @@ public record Pillar(
         ScreenPoint base,
         double radius,
         double depthRadius,
-        double height,
-        boolean marked) {
+        double height) {
 
     private static final double TOUCHING = 1e-9;
 
@@ -55,7 +54,7 @@ public record Pillar(
 
     public Pillar placed(Placement placement) {
         return new Pillar(elementId, clusterIndex, style, placement.apply(base),
-                placement.apply(radius), placement.apply(depthRadius), placement.apply(height), marked);
+                placement.apply(radius), placement.apply(depthRadius), placement.apply(height));
     }
 
     private boolean inBody(ScreenPoint point) {

@@ -2,6 +2,7 @@ package org.ruscayn.infradiagram.quality;
 
 import java.util.List;
 import org.ruscayn.infradiagram.scene.Box;
+import org.ruscayn.infradiagram.scene.ClusterColor;
 import org.ruscayn.infradiagram.scene.ClusterStyle;
 import org.ruscayn.infradiagram.scene.LabelMark;
 import org.ruscayn.infradiagram.scene.Pillar;
@@ -17,19 +18,20 @@ final class Scenes {
 
     static final double RADIUS = 20;
 
-    private static final ClusterStyle STYLE = new ClusterStyle(PillarShape.CYLINDER, 0);
+    private static final ClusterStyle STYLE = new ClusterStyle(PillarShape.CYLINDER, ClusterColor.numbered(0));
 
     private Scenes() {
     }
 
     static Pillar pillar(String id, int cluster, double x, double y, double height) {
-        return new Pillar(id, cluster, STYLE, new ScreenPoint(x, y), RADIUS, RADIUS / 2, height, false);
+        return new Pillar(id, cluster, STYLE, new ScreenPoint(x, y), RADIUS, RADIUS / 2, height);
     }
 
     static LabelMark label(String id, double left, double top, double fontSize) {
         Box textBox = new Box(left, top, 100, fontSize);
         ScreenPoint beside = new ScreenPoint(left - 10, top + fontSize / 2);
-        return new LabelMark(id, "LABEL", 0, textBox, beside, beside, new ScreenPoint(left + 110, top + fontSize / 2), 4);
+        ScreenPoint dot = new ScreenPoint(left + 110, top + fontSize / 2);
+        return new LabelMark(id, "LABEL", ClusterColor.numbered(0), textBox, beside, beside, dot, 4);
     }
 
     static Scene of(List<Pillar> pillars, List<LabelMark> labels) {

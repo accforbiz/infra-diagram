@@ -41,11 +41,8 @@ final class StandardSettings {
     /** 기둥 반지름과 글자 크기의 최솟값(픽셀). 이보다 작게 그려야 하면 그리지 않는다. */
     private static final QualityThresholds QUALITY = new QualityThresholds(12, 16);
 
-    /** 무리의 수, 한 무리의 요소 수, 글자 길이의 상한. */
-    private static final InputLimits LIMITS = new InputLimits(12, 19, 30);
-
-    /** 무리를 구분하는 색의 수. 모양의 수 3과 공약수가 없어야 모양과 색의 짝이 겹치지 않는다. */
-    private static final int COLOR_COUNT = 4;
+    /** 무리의 수, 요소가 둘 이상인 무리의 수(색의 수와 같다), 한 무리의 요소 수, 글자 길이의 상한. */
+    private static final InputLimits LIMITS = new InputLimits(12, 6, 19, 30);
 
     private StandardSettings() {
     }
@@ -54,6 +51,6 @@ final class StandardSettings {
         Spacing spacing = new Spacing(
                 PILLAR_GAP, MIN_CLUSTER_GAP, CLUSTER_GAP_PER_NEIGHBOUR_GAP, LABEL_GAP, ROW_STAGGER);
         return new DrawingSettings(VIEW_ANGLE_DEGREES, PILLAR_SIZES, spacing, LABELS,
-                CANVAS, LINES, QUALITY, LIMITS, COLOR_COUNT);
+                CANVAS, LINES, QUALITY, LIMITS);
     }
 }

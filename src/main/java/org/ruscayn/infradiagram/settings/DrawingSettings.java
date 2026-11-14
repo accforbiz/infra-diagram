@@ -13,8 +13,7 @@ public record DrawingSettings(
         CanvasSettings canvas,
         LineSettings lines,
         QualityThresholds quality,
-        InputLimits limits,
-        int colorCount) {
+        InputLimits limits) {
 
     public static DrawingSettings standard() {
         return StandardSettings.create();

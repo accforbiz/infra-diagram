@@ -17,12 +17,26 @@ final class LimitsRule implements InputRule {
     @Override
     public void check(Infrastructure infrastructure) {
         List<Cluster> clusters = infrastructure.clusters();
+        checkClusterCount(clusters);
+        checkMultiElementClusterCount(clusters);
+        IntStream.range(0, clusters.size()).forEach(index -> checkSize(clusters.get(index), index + 1));
+        infrastructure.elements().forEach(this::checkLabelLength);
+    }
+
+    private void checkClusterCount(List<Cluster> clusters) {
         if (clusters.size() > limits.maxClusters()) {
             String message = "Too many clusters: %d. The maximum is %d.";
             throw new InvalidInputException(message.formatted(clusters.size(), limits.maxClusters()));
         }
-        IntStream.range(0, clusters.size()).forEach(index -> checkSize(clusters.get(index), index + 1));
-        infrastructure.elements().forEach(this::checkLabelLength);
+    }
+
+    private void checkMultiElementClusterCount(List<Cluster> clusters) {
+        long count = clusters.stream().filter(cluster -> !cluster.hasSingleElement()).count();
+        if (count > limits.maxMultiElementClusters()) {
+            String message = "Too many clusters with two or more elements: %d. The maximum is %d, "
+                    + "because each of them is drawn in its own color.";
+            throw new InvalidInputException(message.formatted(count, limits.maxMultiElementClusters()));
+        }
     }
 
     private void checkSize(Cluster cluster, int clusterNumber) {

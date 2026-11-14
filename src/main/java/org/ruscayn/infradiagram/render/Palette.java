@@ -2,12 +2,18 @@ package org.ruscayn.infradiagram.render;
 
 import java.awt.Color;
 import java.util.List;
+import org.ruscayn.infradiagram.scene.ClusterColor;
 
 /**
- * 그림에 쓰는 색이다. 무리마다 색 하나를 받고, 그 색을 옅은 단계와 진한 단계로 나눠 쓴다.
+ * 그림에 쓰는 색이다.
  *
- * 옅은 단계는 그 무리 모든 기둥의 윗면에 칠해서 무리를 구분한다.
- * 진한 단계는 글자가 붙은 기둥의 윗면과 글자 옆의 점에 칠해서 글자와 기둥을 짝짓는다.
+ * 무리의 색은 여섯 가지다. 무리마다 색이 겹치지 않아야 하므로, 서로 가장 잘 구별되는 색을 골랐다.
+ * 색 차이를 계산하는 검증 도구로, 어느 두 무리든 이웃할 수 있다는 조건에서 확인했다.
+ * 가장 비슷한 두 색의 차이가 보통 시각에서 17.8(쉽게 구별된다고 보는 기준 15),
+ * 적록 색각에서 9.3(목표 8)이다. 색을 여덟 가지로 늘리면 이 차이가 12.7로 떨어져 기준에 못 미친다.
+ * 그래서 색을 받는 무리의 수를 여섯으로 제한한다.
+ *
+ * 요소가 하나뿐인 무리는 색을 받지 않고 회색으로 그린다. 이 회색은 여섯 색과 17.3 이상 차이 난다.
  */
 final class Palette {
 
@@ -17,18 +23,16 @@ final class Palette {
     static final Color LINK = new Color(0x9A, 0xA1, 0xA9);
     static final Color TEXT = new Color(0x15, 0x15, 0x15);
 
-    private static final List<Color> LIGHT = List.of(
-            new Color(0xDC, 0xEF, 0xFB), new Color(0xDD, 0xF3, 0xE6),
-            new Color(0xFD, 0xEA, 0xD5), new Color(0xEA, 0xE2, 0xF8));
-    private static final List<Color> STRONG = List.of(
-            new Color(0x86, 0xC8, 0xF2), new Color(0x7F, 0xD1, 0xA6),
-            new Color(0xF5, 0xB2, 0x6E), new Color(0xB3, 0x9B, 0xE6));
+    private static final Color NEUTRAL = new Color(0xD2, 0xD2, 0xD2);
+    private static final List<Color> CLUSTER_COLORS = List.of(
+            new Color(0x3F, 0xBC, 0xF0), new Color(0xC4, 0x60, 0x16), new Color(0x9C, 0x63, 0xC2),
+            new Color(0xA2, 0xBB, 0x40), new Color(0xF9, 0x82, 0xAA), new Color(0x38, 0x94, 0x69));
 
-    Color light(int colorIndex) {
-        return LIGHT.get(colorIndex % LIGHT.size());
+    Color of(ClusterColor color) {
+        return color.isNeutral() ? NEUTRAL : CLUSTER_COLORS.get(color.number());
     }
 
-    Color strong(int colorIndex) {
-        return STRONG.get(colorIndex % STRONG.size());
+    int clusterColorCount() {
+        return CLUSTER_COLORS.size();
     }
 }

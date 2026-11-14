@@ -37,7 +37,7 @@ final class LabelBuilder {
         ScreenPoint tail = new ScreenPoint(tailX, lineCenter);
         Box textBox = textBox(target.text(), side, tailX, lineCenter);
         Pillar pillar = target.pillar();
-        return new LabelMark(pillar.elementId(), target.text(), pillar.style().colorIndex(),
+        return new LabelMark(pillar.elementId(), target.text(), pillar.style().color(),
                 textBox, tail, pillar.topCenter(), dot(textBox, side, lineCenter), settings.dotRadius());
     }
 

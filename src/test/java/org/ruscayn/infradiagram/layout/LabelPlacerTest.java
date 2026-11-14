@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.ruscayn.infradiagram.model.Element;
 import org.ruscayn.infradiagram.model.Scale;
 import org.ruscayn.infradiagram.scene.Box;
+import org.ruscayn.infradiagram.scene.ClusterColor;
 import org.ruscayn.infradiagram.scene.ClusterStyle;
 import org.ruscayn.infradiagram.scene.LabelMark;
 import org.ruscayn.infradiagram.scene.Pillar;
@@ -24,7 +25,7 @@ import org.ruscayn.infradiagram.testing.FixedWidthText;
 class LabelPlacerTest {
 
     private static final double TOLERANCE = 1e-9;
-    private static final ClusterStyle STYLE = new ClusterStyle(PillarShape.CYLINDER, 0);
+    private static final ClusterStyle STYLE = new ClusterStyle(PillarShape.CYLINDER, ClusterColor.numbered(0));
 
     private final LabelPlacer placer = new LabelPlacer(
             new LabelBuilder(new LabelSettings(1.0, 1.5, 1.0, 0.2), new FixedWidthText(), 0.5), 1.5);
@@ -77,7 +78,7 @@ class LabelPlacerTest {
     }
 
     private Pillar pillar(double x, double y) {
-        return new Pillar("p", 0, STYLE, new ScreenPoint(x, y), 1, 0.5, 2, true);
+        return new Pillar("p", 0, STYLE, new ScreenPoint(x, y), 1, 0.5, 2);
     }
 
     private void assertSameBox(Box expected, Box actual) {

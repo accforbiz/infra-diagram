@@ -1,6 +1,5 @@
 package org.ruscayn.infradiagram.render;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
@@ -10,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 import javax.imageio.ImageIO;
+import org.ruscayn.infradiagram.scene.ClusterStyle;
 import org.ruscayn.infradiagram.scene.Pillar;
 import org.ruscayn.infradiagram.scene.PillarShape;
 import org.ruscayn.infradiagram.scene.Scene;
@@ -58,7 +58,7 @@ public final class PngSceneRenderer implements SceneRenderer {
         scene.links().forEach(link -> linkPainter.paint(graphics, link));
         Brush brush = new Brush(graphics, pillarLine);
         scene.backToFront().forEach(pillar -> paintPillar(brush, pillar));
-        scene.labels().forEach(label -> labelPainter.paint(graphics, label, palette.strong(label.colorIndex())));
+        scene.labels().forEach(label -> labelPainter.paint(graphics, label, palette.of(label.color())));
     }
 
     /**
@@ -71,9 +71,8 @@ public final class PngSceneRenderer implements SceneRenderer {
     }
 
     private void paintPillar(Brush brush, Pillar pillar) {
-        int colorIndex = pillar.style().colorIndex();
-        Color topColor = pillar.marked() ? palette.strong(colorIndex) : palette.light(colorIndex);
-        pillarPainters.get(pillar.style().shape()).paint(brush, pillar, topColor);
+        ClusterStyle style = pillar.style();
+        pillarPainters.get(style.shape()).paint(brush, pillar, palette.of(style.color()));
     }
 
     private void write(BufferedImage image, Path output) {

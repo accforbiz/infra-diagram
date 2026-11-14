@@ -22,7 +22,6 @@ public final class SceneLayout {
     private final ClusterLayout clusterLayout;
     private final Spacing spacing;
     private final CanvasSettings canvas;
-    private final int colorCount;
     private final double depthScale;
 
     public SceneLayout(DrawingSettings settings, TextMeasurer measurer) {
@@ -30,7 +29,6 @@ public final class SceneLayout {
         this.clusterLayout = new ClusterLayoutFactory(settings, measurer).create();
         this.spacing = settings.spacing();
         this.canvas = settings.canvas();
-        this.colorCount = settings.colorCount();
     }
 
     public Scene arrange(Infrastructure infrastructure) {
@@ -42,9 +40,9 @@ public final class SceneLayout {
     }
 
     private List<ClusterBlock> blocks(List<Cluster> clusters) {
+        List<ClusterStyle> styles = new ClusterStyles().assign(clusters);
         return IntStream.range(0, clusters.size())
-                .mapToObj(index -> clusterLayout.arrange(
-                        clusters.get(index), index, ClusterStyle.forCluster(index, colorCount)))
+                .mapToObj(index -> clusterLayout.arrange(clusters.get(index), index, styles.get(index)))
                 .toList();
     }
 

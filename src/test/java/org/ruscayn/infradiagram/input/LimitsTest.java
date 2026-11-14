@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 class LimitsTest {
 
-    private static final InputLimits LIMITS = new InputLimits(3, 4, 5);
+    private static final InputLimits LIMITS = new InputLimits(3, 2, 4, 5);
 
     @Test
     @DisplayName("무리의 수가 최솟값인 1개와 상한인 3개이면 받는다")
@@ -23,6 +23,22 @@ class LimitsTest {
         String message = InputTesting.rejectionOf(InputTesting.clustersOfOneElement(4), LIMITS);
 
         assertEquals("Too many clusters: 4. The maximum is 3.", message);
+    }
+
+    @Test
+    @DisplayName("요소가 둘 이상인 무리가 상한인 2개이면 받고, 요소가 하나뿐인 무리는 그 수에 세지 않는다")
+    void acceptsMultiElementClustersAtLimitWithoutCountingSingles() {
+        String json = InputTesting.clusters(pair("a"), pair("b"), single("c"));
+
+        assertEquals(3, InputTesting.read(json, LIMITS).clusters().size());
+    }
+
+    @Test
+    @DisplayName("요소가 둘 이상인 무리가 상한보다 하나 많으면 색이 모자란다는 이유와 함께 거부한다")
+    void rejectsOneMultiElementClusterOverLimit() {
+        String message = InputTesting.rejectionOf(InputTesting.clusters(pair("a"), pair("b"), pair("c")), LIMITS);
+
+        assertTrue(message.startsWith("Too many clusters with two or more elements: 3. The maximum is 2,"), message);
     }
 
     @Test
@@ -61,6 +77,14 @@ class LimitsTest {
         String fiveMathLetters = "𝒜".repeat(5);
 
         InputTesting.read(labeled(fiveMathLetters), LIMITS);
+    }
+
+    private String pair(String prefix) {
+        return "{\"elements\":[{\"id\":\"" + prefix + "1\"},{\"id\":\"" + prefix + "2\"}]}";
+    }
+
+    private String single(String id) {
+        return "{\"elements\":[{\"id\":\"" + id + "\"}]}";
     }
 
     private String labeled(String label) {
