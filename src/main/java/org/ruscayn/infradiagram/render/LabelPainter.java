@@ -16,7 +16,7 @@ import org.ruscayn.infradiagram.settings.LineSettings;
  */
 final class LabelPainter {
 
-    private static final double HEAD_LENGTH_PER_ARROW = 0.4;
+    private static final double HEAD_LENGTH_PER_FONT_SIZE = 0.45;
     private static final double HEAD_SPREAD_RADIANS = Math.toRadians(28);
     private static final double BACKING_PADDING_PER_HEIGHT = 0.25;
 
@@ -29,8 +29,8 @@ final class LabelPainter {
     }
 
     void paint(Graphics2D graphics, LabelMark label, Color dotColor) {
-        clearBehind(graphics, label.bounds());
-        paintArrow(graphics, label.arrowTail(), label.arrowHead());
+        clearBehind(graphics, label.captionBox());
+        paintArrow(graphics, label);
         paintText(graphics, label);
         graphics.setColor(dotColor);
         double radius = label.dotRadius();
@@ -59,14 +59,17 @@ final class LabelPainter {
 
     /**
      * 화살표를 그린다. 몸통 선을 긋고, 머리 끝에서 뒤쪽으로 벌어진 짧은 선 두 개를 긋는다.
+     * 머리의 크기는 화살표의 길이가 아니라 글자 크기에 맞춘다. 화살표가 길어져도 머리가 커지지 않게 하기 위해서다.
      * 예: 화살표가 왼쪽(180도)을 향하면 머리의 두 선은 머리 끝에서 28도와 -28도 방향으로 뻗는다.
      */
-    private void paintArrow(Graphics2D graphics, ScreenPoint tail, ScreenPoint head) {
+    private void paintArrow(Graphics2D graphics, LabelMark label) {
+        ScreenPoint tail = label.arrowTail();
+        ScreenPoint head = label.arrowHead();
         graphics.setColor(Palette.TEXT);
         graphics.setStroke(arrowStroke);
         graphics.draw(line(tail, head));
         double backward = Math.atan2(tail.y() - head.y(), tail.x() - head.x());
-        double length = Math.hypot(tail.x() - head.x(), tail.y() - head.y()) * HEAD_LENGTH_PER_ARROW;
+        double length = label.fontSize() * HEAD_LENGTH_PER_FONT_SIZE;
         graphics.draw(line(head, barb(head, backward + HEAD_SPREAD_RADIANS, length)));
         graphics.draw(line(head, barb(head, backward - HEAD_SPREAD_RADIANS, length)));
     }

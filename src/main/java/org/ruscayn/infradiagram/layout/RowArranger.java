@@ -14,12 +14,14 @@ import org.ruscayn.infradiagram.scene.Box;
 final class RowArranger {
 
     private final RowSplitter splitter;
-    private final double gap;
+    private final double columnGap;
+    private final double rowGap;
     private final double stagger;
 
-    RowArranger(RowSplitter splitter, double gap, double stagger) {
+    RowArranger(RowSplitter splitter, double columnGap, double rowGap, double stagger) {
         this.splitter = splitter;
-        this.gap = gap;
+        this.columnGap = columnGap;
+        this.rowGap = rowGap;
         this.stagger = stagger;
     }
 
@@ -29,7 +31,7 @@ final class RowArranger {
         double top = 0;
         for (int index = 0; index < rows.size(); index++) {
             placed.addAll(placeRow(rows.get(index), startOf(rows.get(index), widest, index), top));
-            top += rowHeight(rows.get(index)) + gap;
+            top += rowHeight(rows.get(index)) + rowGap;
         }
         return placed;
     }
@@ -45,7 +47,7 @@ final class RowArranger {
         double left = start;
         for (Box block : row) {
             placed.add(new Box(left, top + (height - block.height()) / 2, block.width(), block.height()));
-            left += block.width() + gap;
+            left += block.width() + columnGap;
         }
         return placed;
     }

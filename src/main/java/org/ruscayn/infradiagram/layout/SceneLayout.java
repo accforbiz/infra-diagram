@@ -23,8 +23,10 @@ public final class SceneLayout {
     private final Spacing spacing;
     private final CanvasSettings canvas;
     private final int colorCount;
+    private final double depthScale;
 
     public SceneLayout(DrawingSettings settings, TextMeasurer measurer) {
+        this.depthScale = Projection.lookingDownAt(settings.viewAngleDegrees()).depthScale();
         this.clusterLayout = new ClusterLayoutFactory(settings, measurer).create();
         this.spacing = settings.spacing();
         this.canvas = settings.canvas();
@@ -48,7 +50,8 @@ public final class SceneLayout {
 
     private List<ClusterBlock> placed(List<ClusterBlock> blocks) {
         List<Box> bounds = blocks.stream().map(ClusterBlock::bounds).toList();
-        List<Box> spots = new RowPacker(gapBetween(blocks), spacing.rowStagger(), canvas).pack(bounds);
+        double gap = gapBetween(blocks);
+        List<Box> spots = new RowPacker(gap, gap * depthScale, spacing.rowStagger(), canvas).pack(bounds);
         return IntStream.range(0, blocks.size()).mapToObj(index -> blocks.get(index).movedTo(spots.get(index))).toList();
     }
 
@@ -58,6 +61,9 @@ public final class SceneLayout {
      * 배수가 1보다 크므로 서로 다른 무리는 무리 안의 기둥 사이보다 항상 넓게 떨어진다. (품질 조건 3)
      * 예: 무리 안의 틈이 가장 넓은 곳이 0.8이고 배수가 2이면 무리 사이의 틈은 1.6이다.
      * 최솟값이 2.0이면 2.0을 쓴다.
+     *
+     * 줄 사이의 틈은 화면에서 이 값에 앞뒤로 눌린 비율을 곱해 쓴다. 화면의 세로는 앞뒤 방향이
+     * 눌려 보이는 것이어서, 그렇게 해야 바닥에서 잰 틈이 가로 틈과 같아진다.
      */
     private double gapBetween(List<ClusterBlock> blocks) {
         double widestInside = ClusterSpacing.of(pillarsOf(blocks)).within();

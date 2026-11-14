@@ -24,9 +24,9 @@ final class RowPacker {
     private final RowArranger arranger;
     private final CanvasSettings canvas;
 
-    RowPacker(double gap, double stagger, CanvasSettings canvas) {
-        this.splitter = new RowSplitter(gap);
-        this.arranger = new RowArranger(splitter, gap, stagger);
+    RowPacker(double columnGap, double rowGap, double stagger, CanvasSettings canvas) {
+        this.splitter = new RowSplitter(columnGap);
+        this.arranger = new RowArranger(splitter, columnGap, rowGap, stagger);
         this.canvas = canvas;
     }
 
