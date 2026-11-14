@@ -69,7 +69,10 @@ final class LabelPainter {
         graphics.setStroke(arrowStroke);
         graphics.draw(line(tail, head));
         double backward = Math.atan2(tail.y() - head.y(), tail.x() - head.x());
-        double length = label.fontSize() * HEAD_LENGTH_PER_FONT_SIZE;
+        paintBarbs(graphics, head, backward, label.fontSize() * HEAD_LENGTH_PER_FONT_SIZE);
+    }
+
+    private void paintBarbs(Graphics2D graphics, ScreenPoint head, double backward, double length) {
         graphics.draw(line(head, barb(head, backward + HEAD_SPREAD_RADIANS, length)));
         graphics.draw(line(head, barb(head, backward - HEAD_SPREAD_RADIANS, length)));
     }
