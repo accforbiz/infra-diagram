@@ -1,0 +1,11 @@
+# 개발 OS와 무관하게 줄바꿈을 고정한다.
+# sh 파일에 CRLF가 섞이면 macOS와 Linux에서 실행되지 않는다.
+* text=auto
+*.sh text eol=lf
+gradlew text eol=lf
+*.bat text eol=crlf
+
+*.png binary
+*.jar binary
+*.otf binary
+*.ttf binary
