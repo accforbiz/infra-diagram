@@ -3,7 +3,7 @@ package org.ruscayn.infradiagram.scene;
 /**
  * 기둥에 붙이는 글자 하나와 그 곁의 화살표, 색 점이다.
  *
- * textBox의 높이가 글자 크기다. 화살표는 arrowTail에서 arrowHead로 그리며 기둥의 윗면 쪽을 가리킨다.
+ * textBox의 높이가 글자 크기다. 화살표는 글자 곁의 arrowTail에서 기둥 윗면 가운데인 arrowHead까지 그린다.
  * dot은 기둥 윗면과 같은 색으로 칠해서 글자와 기둥을 짝짓는 점이다.
  */
 public record LabelMark(

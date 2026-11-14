@@ -16,7 +16,7 @@ final class StandardSettings {
     private static final double VIEW_ANGLE_DEGREES = 30;
 
     /** 규모가 소, 중, 대인 기둥의 반지름(칸)과, 반지름 1에 대한 높이. */
-    private static final PillarSizes PILLAR_SIZES = new PillarSizes(0.8, 1.0, 1.25, 2.2);
+    private static final PillarSizes PILLAR_SIZES = new PillarSizes(0.8, 1.0, 1.25, 3.0);
 
     /** 기둥 사이의 틈(칸). 바닥끼리, 그리고 앞 기둥과 뒤 기둥의 윗면 사이에 이만큼 띄운다. */
     private static final double PILLAR_GAP = 0.3;
@@ -29,7 +29,7 @@ final class StandardSettings {
     /** 짝수 번째 줄을 오른쪽으로 미는 거리(칸). 줄마다 엇갈리게 한다. */
     private static final double ROW_STAGGER = 1.5;
 
-    /** 글자의 크기(칸), 줄 간격(글자 크기의 배수), 화살표의 길이(칸), 색 점의 반지름(칸). */
+    /** 글자의 크기(칸), 줄 간격(글자 크기의 배수), 화살표가 시작되기 전에 비워 두는 길이(칸), 색 점의 반지름(칸). */
     private static final LabelSettings LABELS = new LabelSettings(0.8, 1.5, 1.0, 0.22);
 
     /** 그림의 가로와 세로(픽셀, 16대 9), 가장자리 여백(픽셀), 한 칸의 최대 크기(픽셀). */

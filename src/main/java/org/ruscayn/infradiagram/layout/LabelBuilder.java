@@ -11,10 +11,11 @@ import org.ruscayn.infradiagram.settings.LabelSettings;
  *
  * 오른쪽에 놓을 때의 가로 배치는 다음과 같다. 왼쪽에 놓을 때는 좌우를 뒤집는다.
  *
- *   무리의 오른쪽 끝 | 틈 | 화살표 | 작은 틈 | 글자 | 작은 틈 | 색 점
+ *   무리의 오른쪽 끝 | 틈 | 화살표가 시작되기 전의 빈자리 | 작은 틈 | 글자 | 작은 틈 | 색 점
  *
- * 화살표는 글자 쪽 끝에서 출발해 기둥의 윗면 가운데를 향한다. 화살표의 길이가 정해져 있고
- * 출발점이 무리의 끝에서 "틈 + 화살표 길이"만큼 떨어져 있으므로, 화살표는 기둥을 덮지 않는다.
+ * 화살표는 글자 쪽 끝에서 출발해 기둥의 윗면 가운데까지 간다. 한 무리에 글자가 여럿 붙어도
+ * 어느 글자가 어느 기둥을 가리키는지 정확히 알 수 있게 하려는 것이다.
+ * 그래서 화살표는 다른 기둥 위를 지나갈 수 있고, 글자를 마지막에 그려 화살표가 가려지지 않게 한다.
  */
 final class LabelBuilder {
 
@@ -32,13 +33,12 @@ final class LabelBuilder {
 
     LabelMark build(LabelTarget target, double lineCenter, Box area) {
         LabelSide side = target.side();
-        double tailX = side.edgeOf(area) + side.direction() * (labelGap + settings.arrowLength());
+        double tailX = side.edgeOf(area) + side.direction() * (labelGap + settings.arrowRoom());
         ScreenPoint tail = new ScreenPoint(tailX, lineCenter);
         Box textBox = textBox(target.text(), side, tailX, lineCenter);
         Pillar pillar = target.pillar();
-        ScreenPoint head = tail.toward(pillar.topCenter(), settings.arrowLength());
         return new LabelMark(pillar.elementId(), target.text(), pillar.style().colorIndex(),
-                textBox, tail, head, dot(textBox, side, lineCenter), settings.dotRadius());
+                textBox, tail, pillar.topCenter(), dot(textBox, side, lineCenter), settings.dotRadius());
     }
 
     private Box textBox(String text, LabelSide side, double tailX, double lineCenter) {
