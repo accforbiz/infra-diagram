@@ -1,5 +1,15 @@
 # 인프라 구성 그림 그리기 (infra-diagram)
 
+## 제출물
+
+과제가 요구한 제출물 세 가지의 위치다.
+
+| 제출물 | 위치 |
+| --- | --- |
+| 1. LLM과의 질답 내용 (공유 URL) | **TODO: 여기에 대화 공유 URL을 적는다** |
+| 2. 완성된 코드와 실행 방식이 기록된 sh 파일 | 코드는 [`src/main/java`](src/main/java), 실행 방식은 [`run.sh`](run.sh)에 있다. 사용법은 아래 3번 항목에 적었다 |
+| 3. 서로 다른 인프라 구성을 설명하는 입력 데이터 2개 이상과, 각 입력으로 그린 이미지 | [`examples`](examples) 폴더의 입력과 그림 세 쌍이다. 입력과 그림은 이름이 같다. 목록은 아래 1번 항목에 적었다 |
+
 ## 1. 프로젝트 설명
 
 채용 과제 "문제 3. 모호한 요구사항을 코드로 정의하기"의 풀이다. 과제의 요구는 다음 문장이다.
@@ -98,7 +108,7 @@
 
 ### 형식
 
-입력은 UTF-8로 저장한 JSON 파일 하나다.
+입력은 UTF-8로 저장한 JSON 파일 하나다. 파일 맨 앞에 BOM이 붙어 있어도 읽는다. BOM은 Windows의 일부 도구가 UTF-8 파일 맨 앞에 붙이는 보이지 않는 표시다.
 
 ```json
 {
@@ -131,6 +141,7 @@
 - **무리를 직접 적는다**: 과제는 "임의의 인프라 구성"이라고만 했다. 데이터 소스가 반드시 있다거나 요소에 정해진 역할이 있다는 말이 없다. 그래서 "데이터 소스", "애플리케이션" 같은 역할을 입력에 두지 않고, 무엇이 한 무리인지만 받는다.
 - **`id`와 `label`을 나눈다**: 요소를 가리키는 이름과 그림에 적는 글자는 쓰임이 다르다. 하나로 합치면 같은 글자를 가진 요소 둘을 구별할 수 없고(예시 그림의 "DATA LAKE" 셋), 글자를 적고 싶지 않은 요소를 연결에서 가리킬 수 없다.
 - **모든 요소는 정확히 한 무리에 속한다**: 홀로 있는 요소를 따로 적는 자리를 두지 않고 "요소 하나뿐인 무리"로 적는다. 규칙이 하나로 줄어든다.
+- **맨 앞의 BOM은 건너뛴다**: BOM이 붙어도 내용은 올바른 UTF-8이다. 거부하면 눈에 보이지 않는 글자 때문에 "1번째 줄 1번째 칸" 오류가 나와서 입력을 쓴 사람이 고치기 어렵다. 맨 앞의 하나만 건너뛰며, UTF-8이 아닌 파일(예: CP949)은 그대로 거부한다.
 
 ### 범위
 
@@ -236,7 +247,7 @@ An input always fits when it has at most 6 clusters, at most 3 of them with two 
 | 출력은 PNG다 | 어느 슬라이드 도구에나 그대로 넣을 수 있다 |
 | 글꼴을 프로그램에 넣는다 | PC마다 깔린 글꼴이 달라 글자의 폭이 달라지면 같은 입력이 다른 그림이 된다. 한글도 그릴 수 있어야 한다 |
 | 무작위를 쓰지 않는다 | 같은 입력이 같은 그림이 되어야 결과를 설명하고 테스트할 수 있다 |
-| 요소가 적으면 그림을 끝없이 키우지 않는다 | 요소 세 개를 화면에 꽉 차게 키우면 기둥이 지나치게 커진다. 중간 규모 기둥의 반지름이 60픽셀을 넘지 않게 한다 |
+| 요소가 적으면 그림을 끝없이 키우지 않는다 | 중간 규모 기둥의 반지름이 60픽셀을 넘지 않게 한다. 요소 세 개짜리 예제를 한도 90픽셀로도 그려 비교했다. 키우면 여백은 줄지만 글자가 48픽셀에서 72픽셀로 커지고 선 굵기는 그대로여서, 요소가 많은 그림과 한 자료에 넣었을 때 느낌이 달라진다 |
 | 예제는 세 개, `run.sh`는 인자 없이 예제 모두 | 과제가 서로 다른 구성의 입력 2개 이상과 그 그림, 실행 방식이 적힌 sh 파일을 요구한다 |
 
 ## 7. 구조와 확장 방법
@@ -285,7 +296,7 @@ An input always fits when it has at most 6 clusters, at most 3 of them with two 
 | 검산한 정답 | 규칙은 지키지만 값이 틀린 계산 | `ProjectionTest`, `RingSlotsTest`, `TopClearanceTest`, `ClusterPitchTest`, `RowPackerTest`, `CanvasFitTest`, `LabelPlacerTest`. 작은 입력을 손으로 계산한 좌표와 비교한다 |
 | 경계값 | 상한과 최솟값을 한 칸 틀리게 판정하는 실수 | `LimitsTest`(상한마다 최솟값, 최댓값, 하나 넘는 값), `QualityRulesTest`(최소 크기와 같을 때와 바로 아래) |
 | 계산 방식이 바뀌는 지점 | 한쪽 경우만 맞고 다른 경우가 틀린 계산 | `RingSlotsTest`(고리가 넘어가는 여덟째, 다 채우지 못한 고리), `ClusterPitchTest`(높은 기둥이 앞일 때와 뒤일 때), `LabelPlacerTest`(왼쪽과 오른쪽, 글자를 아래로 내리는 경우), `ClusterTest`(중심 요소가 있을 때와 없을 때) |
-| 틀렸던 곳 | 한 번 고친 결함이 되살아나는 실수 | `RowPackerTest`(크기가 다른 덩어리가 섞이면 좋은 줄 나눔을 놓치던 결함), `StructureRejectionTest`(모르는 항목의 위치가 "줄 -1"로 나오던 결함), `RingSlotsTest`(둘째 고리의 첫 자리가 동떨어져 보이던 결함) |
+| 틀렸던 곳 | 한 번 고친 결함이 되살아나는 실수 | `RowPackerTest`(크기가 다른 덩어리가 섞이면 좋은 줄 나눔을 놓치던 결함), `StructureRejectionTest`(모르는 항목의 위치가 "줄 -1"로 나오던 결함), `ReadingTest`(맨 앞에 BOM이 붙은 UTF-8 파일이 알기 어려운 안내와 함께 거부되던 결함), `RingSlotsTest`(둘째 고리의 첫 자리가 동떨어져 보이던 결함) |
 | 잘못된 입력 | 거부해야 할 입력을 받아들이거나 엉뚱한 이유를 알리는 실수 | `StructureRejectionTest`, `ElementRejectionTest`, `LinkRejectionTest`, `DisplayableLabelRuleTest`, `DiagramCommandTest`. 거부할 값을 종류별로 하나씩 넣고 안내문을 확인한다 |
 
 - `GuaranteedRangeTest`는 항상 그려지는 범위에서 무리의 순서와 크기를 빠짐없이 훑는다. 실제 글꼴과 표준 설정으로 입력 27,000여 개를 그려 품질 조건을 확인하며 8초쯤 걸린다. 범위를 일부러 넓히면(한 무리의 요소 12개, 또는 요소가 둘 이상인 무리 4개) 이 테스트가 실패하는 것을 확인했다. 4번의 표를 만든 탐색보다는 덜 촘촘하다.
@@ -305,7 +316,6 @@ An input always fits when it has at most 6 clusters, at most 3 of them with two 
 | `JAVA_HOME is not set and no 'java' command could be found` | Gradle을 띄울 자바가 없다. JDK 17 이상을 설치한다. JDK 25를 설치하면 내려받기 없이 바로 쓴다 |
 | JDK 25를 내려받지 못한다(회사 방화벽, 인터넷 없음) | JDK 25를 직접 설치한다. Gradle이 PC에 깔린 JDK를 스스로 찾는다 |
 | 라이브러리를 내려받지 못한다(`Could not resolve`, `429`) | 잠시 뒤 다시 실행한다. 한 번 받은 뒤에는 `./gradlew build --offline`으로 인터넷 없이 빌드할 수 있다 |
-| `Invalid JSON at line 1, column 1: Unexpected character` | 입력 파일 맨 앞에 보이지 않는 표시(BOM)가 붙은 것이다. Windows의 일부 도구가 붙인다. "BOM 없는 UTF-8"로 다시 저장한다 |
 | `Cannot read input file ... Check that it exists and is UTF-8 text.` | 파일 경로를 확인한다. 경로가 맞으면 파일이 UTF-8이 아닌 것이다(예: CP949). UTF-8로 다시 저장한다 |
 | `This input cannot be drawn with acceptable quality.` | 요소나 글자를 줄이거나 글자를 짧게 한다. 4번의 "항상 그려지는 범위"를 참고한다 |
 | `contains a character that cannot be drawn` | 글자에 그림 문자(이모지)나 줄바꿈이 들어 있다. 한글, 영문, 숫자, 흔한 기호로 한 줄에 적는다 |

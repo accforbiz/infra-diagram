@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +52,16 @@ class ReadingTest {
         Infrastructure infrastructure = InputTesting.read(InputTesting.oneCluster("{\"id\":\"a\"}"));
 
         assertTrue(infrastructure.links().isEmpty());
+    }
+
+    @Test
+    @DisplayName("맨 앞에 BOM이 붙은 UTF-8 파일도 BOM이 없는 입력과 같게 읽는다")
+    void readsFileStartingWithByteOrderMark(@TempDir Path directory) throws IOException {
+        Path file = directory.resolve("with-bom.json");
+        Files.writeString(file, "\uFEFF" + FULL, StandardCharsets.UTF_8);
+        JsonInfrastructureReader reader = new JsonInfrastructureReader(infrastructure -> { });
+
+        assertEquals(InputTesting.read(FULL), reader.read(file));
     }
 
     @Test
