@@ -6,7 +6,7 @@
 
 | 제출물 | 위치 |
 | --- | --- |
-| 1. LLM과의 질답 내용 (공유 URL) | **TODO: 여기에 대화 공유 URL을 적는다** |
+| 1. LLM과의 질답 내용 (공유 URL) | https://claude.ai/code/cshk_017a6oLWWPT7ZAPaNbUzkM3DR9388pNHzax3bBPFUC1x6q (Claude Code 클라우드 세션 공유 링크, 열람 시 Claude 유료 요금제(Pro 이상) 계정 로그인 필요) |
 | 2. 완성된 코드와 실행 방식이 기록된 sh 파일 | 코드는 [`src/main/java`](src/main/java), 실행 방식은 [`run.sh`](run.sh)에 있다. 사용법은 아래 3번 항목에 적었다 |
 | 3. 서로 다른 인프라 구성을 설명하는 입력 데이터 2개 이상과, 각 입력으로 그린 이미지 | [`examples`](examples) 폴더의 입력과 그림 세 쌍이다. 입력과 그림은 이름이 같다. 목록은 아래 1번 항목에 적었다 |
 
